@@ -11,50 +11,72 @@ class Menu extends Phaser.Scene {
   }
 
   create() {
-    // menu text configuration
+    //menu text configuration
     let menuConfig = {
-      fontFamily: 'Courier',
-      fontSize: '28px',
-      backgroundColor: '#F3B141',
-      color: '#843605',
-      align: 'right',
-      padding: {
-        top: 5,
-        bottom: 5,
-      },
-      fixedWidth: 0
+      fontFamily: 'luckiest',
+      fontSize: '75px',
+      color: '#996600',
+      align: 'center',
     }
-        
-    // show menu text
-    this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-    this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
-    menuConfig.backgroundColor = '#00FF00';
-    menuConfig.color = '#000';
-    this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width/2, 50, 'Bloons Patrol', menuConfig).setOrigin(0.5);
+    let difficultyConfig= {
+      fontFamily: 'luckiest',
+      fontSize: '50px',
+      color: 'white',
+      stroke: '#996600',
+      strokeThickness: 7,
+      align: 'center',
+    }
 
-    // define keys
-    keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-    keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-  }
-
-  update() {
-    if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-      // Novice mode
+    let easy_button = this.add.text(game.config.width/3 - 75, game.config.height/2 + 50, 'EASY', difficultyConfig).setOrigin(0.5);
+    easy_button.setInteractive();
+    easy_button.on('pointerover', () => {
+      easy_button.setScale(1.3);
+    })
+    easy_button.on('pointerout', () => {
+      easy_button.setScale(1);
+    }) 
+    easy_button.on('pointerdown', () => {
       game.settings = {
-        spaceshipSpeed: 3,
+        difficulty: 1,
         gameTimer: 60000    
       }
       this.sound.play('sfx_select');
-      this.scene.start("playScene");    
-    }
-    if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-      // Expert mode
+      this.scene.start("playScene");  
+    }) 
+    
+    let med_button = this.add.text(game.config.width/2, game.config.height/2 + 50, 'MEDIUM', difficultyConfig).setOrigin(0.5);
+    med_button.setInteractive();
+    med_button.on('pointerover', () => {
+      med_button.setScale(1.3);
+    })
+    med_button.on('pointerout', () => {
+      med_button.setScale(1);
+    })
+    med_button.on('pointerdown', () => {
       game.settings = {
-        spaceshipSpeed: 4,
+        difficulty: 2,
         gameTimer: 45000    
       }
       this.sound.play('sfx_select');
-      this.scene.start("playScene");    
-    }
+      this.scene.start("playScene");      
+    })
+    
+    let hard_button = this.add.text(game.config.width*2/3 + 80, game.config.height/2 + 50, 'HARD', difficultyConfig).setOrigin(0.5);
+    hard_button.setInteractive();
+    hard_button.on('pointerover', () => {
+      hard_button.setScale(1.3);
+    })
+    hard_button.on('pointerout', () => {
+      hard_button.setScale(1);
+    })
+    hard_button.on('pointerdown', () => {
+      game.settings = {
+        difficulty: 3,
+        gameTimer: 45000    
+      }
+      this.sound.play('sfx_select');
+      this.scene.start("playScene");      
+    }) 
   }
 }

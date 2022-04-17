@@ -1,7 +1,7 @@
 // Name: Danny Chung
 // Project: Bloons Patrol
 // Date: 4/17/2022
-// Time Taken: 3:50pm - ?
+// Time Taken: 3:50pm - 7:30pm
 
 // Points Breakdown
 // Create a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (20)
