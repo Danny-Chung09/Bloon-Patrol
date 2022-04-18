@@ -9,6 +9,7 @@ class Menu extends Phaser.Scene {
     // load audio
     this.load.audio('sfx_select', './assets/select.wav');
     this.load.audio('sfx_explosion', './assets/bloon pop.wav');
+    this.load.audio('sfx_nowin', './assets/nowinner.wav');
   }
 
   create() {
@@ -20,7 +21,7 @@ class Menu extends Phaser.Scene {
     //menu text configuration
     let menuConfig = {
       fontFamily: 'luckiest',
-      fontSize: '75px',
+      fontSize: '80px',
       color: '#996600',
       align: 'center',
     }
@@ -112,7 +113,7 @@ class Menu extends Phaser.Scene {
     })
     hard_button.on('pointerdown', () => {
       game.settings.difficulty = 3;
-      game.settings.gameTimer = 45000;
+      game.settings.gameTimer = 10000;
       easy_button.alpha = 0.7;
       med_button.alpha = 0.7;
       hard_button.alpha = 1;

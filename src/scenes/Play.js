@@ -40,24 +40,17 @@ class Play extends Phaser.Scene {
             this.bloon01 = new Bloon(this, game.config.width + borderUISize*3 - 5, 13, 'bbloon', 1, 20, 3.25).setOrigin(0,0);
         }
 
-        // // green UI background
-        // this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
-        // // white borders
-        // this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0 ,0);
-        // this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0 ,0);
-        // this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-        // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
-
         // define keys
         let keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         let keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         let keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-        let keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-        let keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         let keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         let keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         let keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
+        //checks if it needs to create 1 or 2 darts
         if (game.settings.players == 1) {
             this.p1Dart = new Dart(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'dart1', 0, keyA, keyD, keyW).setOrigin(0.5, 0);
         } else {
@@ -74,51 +67,103 @@ class Play extends Phaser.Scene {
 
         // initialize score
         this.p1Score = 0;
+        this.p2Score = 0;
 
-        // display score
         let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
+            fontFamily: 'luckiest',
+            fontSize: '30px',
+            backgroundColor: '#821a7b',
+            color: '#fcec3c',
             align: 'right',
             padding: {
-                top: 5,
                 bottom: 5,
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+        let scoreConfig2 = {
+            fontFamily: 'luckiest',
+            fontSize: '30px',
+            backgroundColor: '#821a7b',
+            color: '#d42c2c',
+            align: 'right',
+            padding: {
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+        let timeConfig = {
+            fontFamily: 'luckiest',
+            fontSize: '30px',
+            backgroundColor: '#821a7b',
+            color: '#fcec3c',
+            align: 'right',
+            padding: {
+                bottom: 5,
+            },
+        }
+        let endConfig = {
+            fontFamily: 'luckiest',
+            fontSize: '75px',
+            color: '#fcec3c',
+            align: 'center',
+        }
+        //adds score
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, 370, 'P1: ' + this.p1Score, scoreConfig);
+        if (game.settings.players == 2) {
+            this.scoreLeft2 = this.add.text(borderUISize + borderPadding, 400, 'P2: ' + this.p2Score, scoreConfig2);
+        }
+
+        //shows time left
+        this.timeLeft = this.add.text(game.config.width - 200, 370, 'Time Left ' + (game.settings.gameTimer/1000), timeConfig);
 
         // GAME OVER flag
         this.gameOver = false;
 
-        // 60-second play clock
+        //checks if time is up
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, 100, 'GAME OVER', endConfig).setOrigin(0.5);
+            endConfig.fontSize = '30px';
+            if (game.settings.players == 2) {
+                if (this.p1Score > this.p2Score) {
+                    this.add.text(game.config.width/2, game.config.height/2 - 25, 'Player 1 Wins', endConfig).setOrigin(0.5);
+                } else if (this.p1Score < this.p2Score) {
+                    this.add.text(game.config.width/2, game.config.height/2 - 25, 'Player 2 Wins', endConfig).setOrigin(0.5);
+                } else {
+                    this.sound.play('sfx_nowin');
+                    this.add.text(game.config.width/2, game.config.height/2 - 25, 'No One Won', endConfig).setOrigin(0.5);
+                }
+            }
+            this.add.text(game.config.width/2, game.config.height - 160, 'Press (R) to Restart or (F) to Menu', endConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
     }
 
     update() {
+        //updates time left
+        this.timeLeft.text = 'Time Left ' + Math.ceil(this.clock.getOverallRemainingSeconds());
+
         // check key input for restart / menu
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
 
-        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.scene.start("menuScene");
         }
 
+        //updates if game is not over yet
         if(!this.gameOver) {
-            this.map.tilePositionX -= 4;  // update tile sprite
-            this.p1Dart.update();             // update p1
+            //update map
+            this.map.tilePositionX -= 4;    
+            //update p1
+            this.p1Dart.update();             
             if (game.settings.players == 2) {
+                //update p2
                 this.p2Dart.update();
             }
-            this.bloon01.update();            // update bloons (x4/5)
+            // update bloons (x4/5)
+            this.bloon01.update();           
             this.bloon02.update();
             this.bloon03.update();
             this.bloon04.update();
@@ -131,45 +176,65 @@ class Play extends Phaser.Scene {
         if (game.settings.difficulty == 3 && this.checkCollision(this.p1Dart, this.bloon05)) {
             this.p1Dart.reset();
             this.bloonPop(this.bloon05);
+            this.p1Score += this.bloon05.points;
+            this.scoreLeft.text = 'P1: ' + this.p1Score;
         }
 
         if (this.checkCollision(this.p1Dart, this.bloon04)) {
             this.p1Dart.reset();
             this.bloonPop(this.bloon04);
+            this.p1Score += this.bloon04.points;
+            this.scoreLeft.text = 'P1: ' + this.p1Score;
         }
         if(this.checkCollision(this.p1Dart, this.bloon03)) {
             this.p1Dart.reset();
             this.bloonPop(this.bloon03);
+            this.p1Score += this.bloon03.points;
+            this.scoreLeft.text = 'P1: ' + this.p1Score;
         }
         if (this.checkCollision(this.p1Dart, this.bloon02)) {
             this.p1Dart.reset();
             this.bloonPop(this.bloon02);
+            this.p1Score += this.bloon02.points;
+            this.scoreLeft.text = 'P1: ' + this.p1Score;
         }
         if (this.checkCollision(this.p1Dart, this.bloon01)) {
             this.p1Dart.reset();
             this.bloonPop(this.bloon01);
+            this.p1Score += this.bloon01.points;
+            this.scoreLeft.text = 'P1: ' + this.p1Score;
         }
         if (game.settings.players == 2) {
             if (game.settings.difficulty == 3 && this.checkCollision(this.p2Dart, this.bloon05)) {
                 this.p2Dart.reset();
                 this.bloonPop(this.bloon05);
+                this.p2Score += this.bloon05.points;
+                this.scoreLeft2.text = 'P2: ' + this.p2Score;
             }
 
             if (this.checkCollision(this.p2Dart, this.bloon04)) {
                 this.p2Dart.reset();
                 this.bloonPop(this.bloon04);
+                this.p2Score += this.bloon04.points;
+                this.scoreLeft2.text = 'P2: ' + this.p2Score;
             }
             if(this.checkCollision(this.p2Dart, this.bloon03)) {
                 this.p2Dart.reset();
                 this.bloonPop(this.bloon03);
+                this.p2Score += this.bloon03.points;
+                this.scoreLeft2.text = 'P2: ' + this.p2Score;
             }
             if (this.checkCollision(this.p2Dart, this.bloon02)) {
                 this.p2Dart.reset();
                 this.bloonPop(this.bloon02);
+                this.p2Score += this.bloon02.points;
+                this.scoreLeft2.text = 'P2: ' + this.p2Score;
             }
             if (this.checkCollision(this.p2Dart, this.bloon01)) {
                 this.p2Dart.reset();
                 this.bloonPop(this.bloon01);
+                this.p2Score += this.bloon01.points;
+                this.scoreLeft2.text = 'P2: ' + this.p2Score;
             }
         }
     }
@@ -187,33 +252,36 @@ class Play extends Phaser.Scene {
     }
 
     bloonPop(bloon) {
-        // score add
-        this.p1Score += bloon.points;
-        this.scoreLeft.text = this.p1Score; 
-        // temporarily hide ship                         
-        // create explosion sprite at ship's position
+        // temporarily hide balloon                        
+        // create explosion sprite at balloons's position
         if (bloon.type == 0) {
             bloon.alpha = 0;
             let boom = this.add.sprite(bloon.x, bloon.y, 'rpop').setOrigin(0, 0); 
             this.sound.play('sfx_explosion');
             boom.anims.play('rpop'); 
             boom.on('animationcomplete', () => {    // callback after anim completes
-                bloon.resetcolor();                         // reset ship position
+                bloon.resetcolor();                         // reset balloon color and position
                 bloon.alpha = 1;                       // make ship visible again
                 boom.destroy();                       // remove explosion sprite
             });
         } else {
             this.sound.play('sfx_explosion');
+            //lower balloon's type
             if (bloon.type == 3) {
-                bloon.type -= 1;
+                bloon.type = 2;
                 bloon.setTexture(bloon.bloons[bloon.type]);
                 bloon.points = 30;
                 bloon.moveSpeed = 3.5;
-            } else {
-                bloon.type -= 1;
+            } else if (bloon.type == 2){
+                bloon.type = 1;
                 bloon.setTexture(bloon.bloons[bloon.type]);
-                bloon.points -= 10;
-                bloon.moveSpeed -= .25;
+                bloon.points = 20;
+                bloon.moveSpeed = 3.25;
+            } else {
+                bloon.type = 0;
+                bloon.setTexture(bloon.bloons[bloon.type]);
+                bloon.points = 10;
+                bloon.moveSpeed = 3;
             }
         }
       }
