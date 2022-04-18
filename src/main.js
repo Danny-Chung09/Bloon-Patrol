@@ -6,7 +6,6 @@
 // Points Breakdown
 // Create a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (20)
 // Redesign the game's artwork, UI, and sound to change its theme/aesthetic (to something other than sci-fi) (60)
-// Implement a new timing/scoring mechanism that adds time to the clock for successful hits (20)
 // Implement a simultaneous two-player mode (30)
 
 // Sources
@@ -25,6 +24,3 @@ let game = new Phaser.Game(config);
 // set UI sizes
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
-
-// reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT;
