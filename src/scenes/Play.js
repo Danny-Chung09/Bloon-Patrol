@@ -5,7 +5,8 @@ class Play extends Phaser.Scene {
 
     preload() {
         // load images/tile sprites
-        this.load.image('dart', './assets/dart.png');
+        this.load.image('dart1', './assets/dart1.png');
+        this.load.image('dart2', './assets/dart2.png');
         this.load.image('rbloon', './assets/RedBloon.png');
         this.load.image('bbloon', './assets/BlueBloon.png');
         this.load.image('gbloon', './assets/GreenBloon.png');
@@ -55,14 +56,13 @@ class Play extends Phaser.Scene {
         let keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         let keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         let keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        let keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
-        console.log(game.settings.players);
-        console.log(game.settings.difficulty);
-        console.log(game.settings.gameTimer);
         if (game.settings.players == 1) {
-            console.log("innit");
-            this.p1Dart = new Dart(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'dart', 0, keyA, keyD, keyW).setOrigin(0.5, 0);
-            console.log("lol");
+            this.p1Dart = new Dart(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'dart1', 0, keyA, keyD, keyW).setOrigin(0.5, 0);
+        } else {
+            this.p1Dart = new Dart(this, game.config.width/3, game.config.height - borderUISize - borderPadding, 'dart1', 0, keyA, keyD, keyW).setOrigin(0.5, 0);
+            this.p2Dart = new Dart(this, game.config.width*2/3, game.config.height - borderUISize - borderPadding, 'dart2', 0, keyLEFT, keyRIGHT, keyUP).setOrigin(0.5,0);
         }
 
         // animation config
@@ -115,6 +115,9 @@ class Play extends Phaser.Scene {
         if(!this.gameOver) {
             this.map.tilePositionX -= 4;  // update tile sprite
             this.p1Dart.update();             // update p1
+            if (game.settings.players == 2) {
+                this.p2Dart.update();
+            }
             this.bloon01.update();            // update bloons (x4/5)
             this.bloon02.update();
             this.bloon03.update();
@@ -145,6 +148,29 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Dart, this.bloon01)) {
             this.p1Dart.reset();
             this.bloonPop(this.bloon01);
+        }
+        if (game.settings.players == 2) {
+            if (game.settings.difficulty == 3 && this.checkCollision(this.p2Dart, this.bloon05)) {
+                this.p2Dart.reset();
+                this.bloonPop(this.bloon05);
+            }
+
+            if (this.checkCollision(this.p2Dart, this.bloon04)) {
+                this.p2Dart.reset();
+                this.bloonPop(this.bloon04);
+            }
+            if(this.checkCollision(this.p2Dart, this.bloon03)) {
+                this.p2Dart.reset();
+                this.bloonPop(this.bloon03);
+            }
+            if (this.checkCollision(this.p2Dart, this.bloon02)) {
+                this.p2Dart.reset();
+                this.bloonPop(this.bloon02);
+            }
+            if (this.checkCollision(this.p2Dart, this.bloon01)) {
+                this.p2Dart.reset();
+                this.bloonPop(this.bloon01);
+            }
         }
     }
 

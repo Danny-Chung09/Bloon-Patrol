@@ -15,9 +15,9 @@ class Dart extends Phaser.GameObjects.Sprite {
     update() {
         // left/right movement
         if(!this.isFiring) {
-            if(this.keyleft.isDown && this.x >= borderUISize + this.width) {
+            if(this.keyleft.isDown && this.x >= 10) {
                 this.x -= this.moveSpeed;
-            } else if (this.keyright.isDown && this.x <= game.config.width - borderUISize - this.width) {
+            } else if (this.keyright.isDown && this.x <= game.config.width - 10) {
                 this.x += this.moveSpeed;
             }
         }

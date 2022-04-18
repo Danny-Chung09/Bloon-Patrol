@@ -34,6 +34,7 @@ class Menu extends Phaser.Scene {
     }
 
     this.add.text(game.config.width/2, 50, 'Bloons Patrol', menuConfig).setOrigin(0.5);
+
     let difficultyConfig= {
       fontFamily: 'luckiest',
       fontSize: '50px',
@@ -79,7 +80,9 @@ class Menu extends Phaser.Scene {
     easy_button.on('pointerdown', () => {
       game.settings.difficulty = 1;
       game.settings.gameTimer = 60000;
-      //easy_button.difficultyConfig.backgroundColor = '#F3B141';
+      easy_button.alpha = 1;
+      med_button.alpha = 0.7;
+      hard_button.alpha = 0.7;
       this.sound.play('sfx_select');  
     }) 
     
@@ -94,6 +97,9 @@ class Menu extends Phaser.Scene {
     med_button.on('pointerdown', () => {
       game.settings.difficulty = 2;
       game.settings.gameTimer = 45000;
+      easy_button.alpha = 0.7;
+      med_button.alpha = 1;
+      hard_button.alpha = 0.7;
       this.sound.play('sfx_select');     
     })
     
@@ -106,12 +112,16 @@ class Menu extends Phaser.Scene {
       hard_button.setScale(1);
     })
     hard_button.on('pointerdown', () => {
-      game.settings = {
-        difficulty: 3,
-        gameTimer: 45000    
-      }
+      game.settings.difficulty = 3;
+      game.settings.gameTimer = 45000;
+      easy_button.alpha = 0.7;
+      med_button.alpha = 0.7;
+      hard_button.alpha = 1;
       this.sound.play('sfx_select');      
     })
+    easy_button.alpha = 1;
+    med_button.alpha = 0.7;
+    hard_button.alpha = 0.7;
     
     let confirm = this.add.text(game.config.width/2, game.config.height*4/5, 'CONFIRM', difficultyConfig).setOrigin(0.5);
     confirm.setInteractive();
