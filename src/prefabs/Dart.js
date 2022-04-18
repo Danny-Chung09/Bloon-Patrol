@@ -1,9 +1,12 @@
 // Rocket prefab
 class Dart extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame) {
+    constructor(scene, x, y, texture, frame, keyL, keyR, keyFire) {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);   // add to existing, displayList, updateList
+        this.keyleft = keyL;
+        this.keyright = keyR;
+        this.keyfire = keyFire;
         this.isFiring = false;      // track rocket's firing status
         this.moveSpeed = 4;         // pixels per frame
         //this.sfxRocket = scene.sound.add('sfx_rocket') // add rocket sfx
@@ -12,14 +15,14 @@ class Dart extends Phaser.GameObjects.Sprite {
     update() {
         // left/right movement
         if(!this.isFiring) {
-            if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
+            if(this.keyleft.isDown && this.x >= borderUISize + this.width) {
                 this.x -= this.moveSpeed;
-            } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
+            } else if (this.keyright.isDown && this.x <= game.config.width - borderUISize - this.width) {
                 this.x += this.moveSpeed;
             }
         }
         // fire button
-        if (Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
+        if (this.keyfire.isDown && !this.isFiring) {
             this.isFiring = true;
             //this.sfxDart.play();  // play sfx
         }

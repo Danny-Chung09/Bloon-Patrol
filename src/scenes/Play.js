@@ -13,30 +13,30 @@ class Play extends Phaser.Scene {
         this.load.image('muddy', './assets/map1.png');
         this.load.image('bloody', './assets/map2.png');
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('rpop', './assets/rbloonpop.png', {frameWidth: 40, frameHeight: 54, startFrame: 0, endFrame: 5});
     }
 
     create() {
         // place tile sprite and bloons
         if (game.settings.difficulty == 3) {
             this.map = this.add.tileSprite(0, 0, 640, 480, 'bloody').setOrigin(0, 0);
-            this.bloon05 = new RedBloon(this, game.config.width, borderUISize*7, 'rbloon', 0).setOrigin(0,0);
-            this.bloon04 = new BlueBloon(this, game.config.width - 100, borderUISize*7 - 5, 'bbloon', 0).setOrigin(0,0);
-            this.bloon03 = new GreenBloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'gbloon', 0).setOrigin(0,0);
-            this.bloon02 = new PinkBloon(this, game.config.width, borderUISize*3 - 10, 'pbloon', 0).setOrigin(0,0);
-            this.bloon01 = new PinkBloon(this, game.config.width + borderUISize*4, 10, 'pbloon', 0).setOrigin(0,0);
+            this.bloon05 = new Bloon(this, game.config.width, borderUISize*7, 'bbloon', 1, 20, 3.25).setOrigin(0,0);
+            this.bloon04 = new Bloon(this, game.config.width/2, borderUISize*7, 'bbloon', 1, 20, 3.25).setOrigin(0,0);
+            this.bloon03 = new Bloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'gbloon', 2, 30, 3.5).setOrigin(0,0);
+            this.bloon02 = new Bloon(this, game.config.width, borderUISize*3 - 10, 'pbloon', 3, 50, 6).setOrigin(0,0);
+            this.bloon01 = new Bloon(this, game.config.width + borderUISize*4, 10, 'pbloon', 3, 50, 6).setOrigin(0,0);
         } else if (game.settings.difficulty == 2) {
             this.map = this.add.tileSprite(0, 0, 640, 480, 'muddy').setOrigin(0, 0);
-            this.bloon04 = new RedBloon(this, game.config.width, borderUISize*6 + borderPadding*3, 'rbloon', 0).setOrigin(0,0);
-            this.bloon03 = new RedBloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'rbloon', 0).setOrigin(0,0);
-            this.bloon02 = new BlueBloon(this, game.config.width + borderUISize*2, borderUISize*3 - 10, 'bbloon', 0).setOrigin(0,0);
-            this.bloon01 = new GreenBloon(this, game.config.width + borderUISize*3 - 5, 13, 'gbloon', 0).setOrigin(0,0);
+            this.bloon04 = new Bloon(this, game.config.width, borderUISize*6 + borderPadding*3, 'rbloon', 0, 10, 3).setOrigin(0,0);
+            this.bloon03 = new Bloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'rbloon', 0, 10, 3).setOrigin(0,0);
+            this.bloon02 = new Bloon(this, game.config.width + borderUISize*2, borderUISize*3 - 10, 'bbloon', 1, 20, 3.25).setOrigin(0,0);
+            this.bloon01 = new Bloon(this, game.config.width + borderUISize*3 - 5, 13, 'gbloon', 2, 30, 3.5).setOrigin(0,0);
         } else {
             this.map = this.add.tileSprite(0, 0, 640, 480, 'muddy').setOrigin(0, 0);
-            this.bloon04 = new RedBloon(this, game.config.width, borderUISize*6 + borderPadding*3, 'rbloon', 0).setOrigin(0,0);
-            this.bloon03 = new RedBloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'rbloon', 0).setOrigin(0,0);
-            this.bloon02 = new RedBloon(this, game.config.width + borderUISize*2, borderUISize*3 - 10, 'rbloon', 0).setOrigin(0,0);
-            this.bloon01 = new BlueBloon(this, game.config.width + borderUISize*3 - 5, 13, 'bbloon', 0).setOrigin(0,0);
+            this.bloon04 = new Bloon(this, game.config.width, borderUISize*6 + borderPadding*3, 'rbloon', 0, 10, 3).setOrigin(0,0);
+            this.bloon03 = new Bloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'rbloon', 0, 10, 3).setOrigin(0,0);
+            this.bloon02 = new Bloon(this, game.config.width + borderUISize*2, borderUISize*3 - 10, 'rbloon', 0, 10, 3).setOrigin(0,0);
+            this.bloon01 = new Bloon(this, game.config.width + borderUISize*3 - 5, 13, 'bbloon', 1, 20, 3.25).setOrigin(0,0);
         }
 
         // // green UI background
@@ -47,19 +47,28 @@ class Play extends Phaser.Scene {
         // this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
         // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0 ,0);
 
-        // add Dart (p1)
-        this.p1Dart = new Dart(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'dart').setOrigin(0.5, 0);
-
         // define keys
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        let keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        let keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        let keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        let keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        let keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        let keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        let keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        console.log(game.settings.players);
+        console.log(game.settings.difficulty);
+        console.log(game.settings.gameTimer);
+        if (game.settings.players == 1) {
+            console.log("innit");
+            this.p1Dart = new Dart(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'dart', 0, keyA, keyD, keyW).setOrigin(0.5, 0);
+            console.log("lol");
+        }
 
         // animation config
         this.anims.create({
-            key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0}),
+            key: 'rpop',
+            frames: this.anims.generateFrameNumbers('rpop', { start: 0, end: 5, first: 0}),
             frameRate: 30
         });
 
@@ -152,20 +161,34 @@ class Play extends Phaser.Scene {
     }
 
     bloonPop(bloon) {
-        // temporarily hide ship
-        bloon.alpha = 0;                         
-        // create explosion sprite at ship's position
-        let boom = this.add.sprite(bloon.x, bloon.y, 'explosion').setOrigin(0, 0);
-        boom.anims.play('explode');             // play explode animation
-        boom.on('animationcomplete', () => {    // callback after anim completes
-            bloon.reset();                         // reset ship position
-            bloon.alpha = 1;                       // make ship visible again
-            boom.destroy();                       // remove explosion sprite
-        });
-        // score add and repaint
+        // score add
         this.p1Score += bloon.points;
         this.scoreLeft.text = this.p1Score; 
-        
-        this.sound.play('sfx_explosion');
+        // temporarily hide ship                         
+        // create explosion sprite at ship's position
+        if (bloon.type == 0) {
+            bloon.alpha = 0;
+            let boom = this.add.sprite(bloon.x, bloon.y, 'rpop').setOrigin(0, 0); 
+            this.sound.play('sfx_explosion');
+            boom.anims.play('rpop'); 
+            boom.on('animationcomplete', () => {    // callback after anim completes
+                bloon.resetcolor();                         // reset ship position
+                bloon.alpha = 1;                       // make ship visible again
+                boom.destroy();                       // remove explosion sprite
+            });
+        } else {
+            this.sound.play('sfx_explosion');
+            if (bloon.type == 3) {
+                bloon.type -= 1;
+                bloon.setTexture(bloon.bloons[bloon.type]);
+                bloon.points = 30;
+                bloon.moveSpeed = 3.5;
+            } else {
+                bloon.type -= 1;
+                bloon.setTexture(bloon.bloons[bloon.type]);
+                bloon.points -= 10;
+                bloon.moveSpeed -= .25;
+            }
+        }
       }
 }

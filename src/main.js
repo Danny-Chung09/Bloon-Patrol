@@ -1,7 +1,7 @@
 // Name: Danny Chung
 // Project: Bloons Patrol
 // Date: 4/17/2022
-// Time Taken: 3:50pm - 7:30pm 5:30pm-7pm
+// Time Taken: 3:50pm - 7:30pm 5:30pm-7pm 9pm - ?
 
 // Points Breakdown
 // Create a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (20)
@@ -11,11 +11,12 @@
 
 // Sources
 // Balloons assests taken directly from Bloons Tower Defense 6
-
+// Balloon pop sound taken from youtube which is also from BTD6
 let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
+    backgroundColor: '#4488aa',
     scene: [ Menu, Play ]
 }
 

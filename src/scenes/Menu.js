@@ -4,13 +4,20 @@ class Menu extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('player1', './assets/move1.png');
+    this.load.image('player2', './assets/move2.png');
     // load audio
     this.load.audio('sfx_select', './assets/blip_select12.wav');
-    this.load.audio('sfx_explosion', './assets/explosion38.wav');
+    this.load.audio('sfx_explosion', './assets/bloon pop.wav');
     //this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
   }
 
   create() {
+    game.settings = {
+      players: 1,
+      difficulty: 1,
+      gameTimer: 60000     
+    }
     //menu text configuration
     let menuConfig = {
       fontFamily: 'luckiest',
@@ -36,32 +43,27 @@ class Menu extends Phaser.Scene {
       align: 'center',
     }
 
-    let one_player = this.add.text(game.config.width/3 - 75, game.config.height/2 - 50, '1 Player', difficultyConfig).setOrigin(0.5);
-    one_player.setInteractive();
-    one_player.on('pointerover', () => {
-      one_player.setScale(1.3);
-    })
-    one_player.on('pointerout', () => {
-      one_player.setScale(1);
-    }) 
-    one_player.on('pointerdown', () => {
-      game.settings = {
-        players: 1   
-      }
-      this.sound.play('sfx_select');
-    })
+    this.p1move = this.add.tileSprite(-10, 100, 200, 200, 'player1').setOrigin(0, 0);
+    this.p2move = this.add.tileSprite(game.config.width - 190, 100, 200, 200, 'player2').setOrigin(0, 0);
+    this.p2move.alpha = 0;
 
-    let two_player = this.add.text(game.config.width*2/3 + 50, game.config.height/2 - 50, '2 Players', difficultyConfig).setOrigin(0.5);
-    two_player.setInteractive();
-    two_player.on('pointerover', () => {
-      two_player.setScale(1.3);
+    let player = this.add.text(game.config.width/2, game.config.height/2 - 50, game.settings.players + ' Player', difficultyConfig).setOrigin(0.5);
+    player.setInteractive();
+    player.on('pointerover', () => {
+      player.setScale(1.3);
     })
-    two_player.on('pointerout', () => {
-      two_player.setScale(1);
+    player.on('pointerout', () => {
+      player.setScale(1);
     }) 
-    two_player.on('pointerdown', () => {
-      game.settings = {
-        players: 2   
+    player.on('pointerdown', () => {
+      if (game.settings.players == 1) {
+        game.settings.players = 2;
+        this.p2move.alpha = 1;
+        player.text = game.settings.players + ' Players';
+      } else {
+        game.settings.players = 1;
+        this.p2move.alpha = 0;
+        player.text = game.settings.players + ' Player';
       }
       this.sound.play('sfx_select');
     })
@@ -75,10 +77,9 @@ class Menu extends Phaser.Scene {
       easy_button.setScale(1);
     }) 
     easy_button.on('pointerdown', () => {
-      game.settings = {
-        difficulty: 1,
-        gameTimer: 60000    
-      }
+      game.settings.difficulty = 1;
+      game.settings.gameTimer = 60000;
+      //easy_button.difficultyConfig.backgroundColor = '#F3B141';
       this.sound.play('sfx_select');  
     }) 
     
@@ -91,10 +92,8 @@ class Menu extends Phaser.Scene {
       med_button.setScale(1);
     })
     med_button.on('pointerdown', () => {
-      game.settings = {
-        difficulty: 2,
-        gameTimer: 45000    
-      }
+      game.settings.difficulty = 2;
+      game.settings.gameTimer = 45000;
       this.sound.play('sfx_select');     
     })
     
