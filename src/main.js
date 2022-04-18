@@ -15,7 +15,7 @@
 
 // Sources
 // Balloons assets taken directly from Bloons Tower Defense 6
-// All sounds taken from youtube which is directly from BTD6
+// All sounds taken from youtube which is directly from Bloons Tower Defense 6
 let config = {
     type: Phaser.CANVAS,
     width: 640,
