@@ -113,7 +113,7 @@ class Menu extends Phaser.Scene {
     })
     hard_button.on('pointerdown', () => {
       game.settings.difficulty = 3;
-      game.settings.gameTimer = 10000;
+      game.settings.gameTimer = 45000;
       easy_button.alpha = 0.7;
       med_button.alpha = 0.7;
       hard_button.alpha = 1;

@@ -2,3 +2,8 @@
     font-family: 'Luckiest';
     src: url('../assets/LuckiestGuy-Regular.ttf');
 }
+
+canvas {
+    display: block;
+    margin: auto;
+}
