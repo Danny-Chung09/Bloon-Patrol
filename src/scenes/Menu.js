@@ -18,6 +18,14 @@ class Menu extends Phaser.Scene {
       color: '#996600',
       align: 'center',
     }
+
+    let playerConfig = {
+      fontFamily: 'luckiest',
+      fontSize: '75px',
+      color: '#996600',
+      align: 'center',
+    }
+
     this.add.text(game.config.width/2, 50, 'Bloons Patrol', menuConfig).setOrigin(0.5);
     let difficultyConfig= {
       fontFamily: 'luckiest',
@@ -27,6 +35,36 @@ class Menu extends Phaser.Scene {
       strokeThickness: 7,
       align: 'center',
     }
+
+    let one_player = this.add.text(game.config.width/3 - 75, game.config.height/2 - 50, '1 Player', difficultyConfig).setOrigin(0.5);
+    one_player.setInteractive();
+    one_player.on('pointerover', () => {
+      one_player.setScale(1.3);
+    })
+    one_player.on('pointerout', () => {
+      one_player.setScale(1);
+    }) 
+    one_player.on('pointerdown', () => {
+      game.settings = {
+        players: 1   
+      }
+      this.sound.play('sfx_select');
+    })
+
+    let two_player = this.add.text(game.config.width*2/3 + 50, game.config.height/2 - 50, '2 Players', difficultyConfig).setOrigin(0.5);
+    two_player.setInteractive();
+    two_player.on('pointerover', () => {
+      two_player.setScale(1.3);
+    })
+    two_player.on('pointerout', () => {
+      two_player.setScale(1);
+    }) 
+    two_player.on('pointerdown', () => {
+      game.settings = {
+        players: 2   
+      }
+      this.sound.play('sfx_select');
+    })
 
     let easy_button = this.add.text(game.config.width/3 - 75, game.config.height/2 + 50, 'EASY', difficultyConfig).setOrigin(0.5);
     easy_button.setInteractive();
@@ -41,8 +79,7 @@ class Menu extends Phaser.Scene {
         difficulty: 1,
         gameTimer: 60000    
       }
-      this.sound.play('sfx_select');
-      this.scene.start("playScene");  
+      this.sound.play('sfx_select');  
     }) 
     
     let med_button = this.add.text(game.config.width/2, game.config.height/2 + 50, 'MEDIUM', difficultyConfig).setOrigin(0.5);
@@ -58,8 +95,7 @@ class Menu extends Phaser.Scene {
         difficulty: 2,
         gameTimer: 45000    
       }
-      this.sound.play('sfx_select');
-      this.scene.start("playScene");      
+      this.sound.play('sfx_select');     
     })
     
     let hard_button = this.add.text(game.config.width*2/3 + 80, game.config.height/2 + 50, 'HARD', difficultyConfig).setOrigin(0.5);
@@ -75,8 +111,20 @@ class Menu extends Phaser.Scene {
         difficulty: 3,
         gameTimer: 45000    
       }
+      this.sound.play('sfx_select');      
+    })
+    
+    let confirm = this.add.text(game.config.width/2, game.config.height*4/5, 'CONFIRM', difficultyConfig).setOrigin(0.5);
+    confirm.setInteractive();
+    confirm.on('pointerover', () => {
+      confirm.setScale(1.3);
+    })
+    confirm.on('pointerout', () => {
+      confirm.setScale(1);
+    })
+    confirm.on('pointerdown', () => {
       this.sound.play('sfx_select');
       this.scene.start("playScene");      
-    }) 
+    })
   }
 }

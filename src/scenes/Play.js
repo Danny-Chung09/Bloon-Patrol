@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('gbloon', './assets/GreenBloon.png');
         this.load.image('pbloon', './assets/PinkBloon.png');
         this.load.image('muddy', './assets/map1.png');
+        this.load.image('bloody', './assets/map2.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
@@ -18,11 +19,12 @@ class Play extends Phaser.Scene {
     create() {
         // place tile sprite and bloons
         if (game.settings.difficulty == 3) {
-            this.map = this.add.tileSprite(0, 0, 640, 480, 'muddy').setOrigin(0, 0);
-            this.bloon04 = new BlueBloon(this, game.config.width, borderUISize*6 + borderPadding*3, 'bbloon', 0).setOrigin(0,0);
-            this.bloon03 = new BlueBloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'bbloon', 0).setOrigin(0,0);
-            this.bloon02 = new GreenBloon(this, game.config.width + borderUISize*2, borderUISize*3 - 10, 'gbloon', 0).setOrigin(0,0);
-            this.bloon01 = new PinkBloon(this, game.config.width + borderUISize*3 - 5, 13, 'pbloon', 0).setOrigin(0,0);
+            this.map = this.add.tileSprite(0, 0, 640, 480, 'bloody').setOrigin(0, 0);
+            this.bloon05 = new RedBloon(this, game.config.width, borderUISize*7, 'rbloon', 0).setOrigin(0,0);
+            this.bloon04 = new BlueBloon(this, game.config.width - 100, borderUISize*7 - 5, 'bbloon', 0).setOrigin(0,0);
+            this.bloon03 = new GreenBloon(this, game.config.width + borderUISize, borderUISize*5 - 5, 'gbloon', 0).setOrigin(0,0);
+            this.bloon02 = new PinkBloon(this, game.config.width, borderUISize*3 - 10, 'pbloon', 0).setOrigin(0,0);
+            this.bloon01 = new PinkBloon(this, game.config.width + borderUISize*4, 10, 'pbloon', 0).setOrigin(0,0);
         } else if (game.settings.difficulty == 2) {
             this.map = this.add.tileSprite(0, 0, 640, 480, 'muddy').setOrigin(0, 0);
             this.bloon04 = new RedBloon(this, game.config.width, borderUISize*6 + borderPadding*3, 'rbloon', 0).setOrigin(0,0);
@@ -101,17 +103,24 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        this.map.tilePositionX -= 4;  // update tile sprite
-
         if(!this.gameOver) {
+            this.map.tilePositionX -= 4;  // update tile sprite
             this.p1Dart.update();             // update p1
             this.bloon01.update();            // update bloons (x4/5)
             this.bloon02.update();
             this.bloon03.update();
             this.bloon04.update();
+            if (game.settings.difficulty == 3) {
+                this.bloon05.update();
+            }
         }
 
         // check collisions
+        if (game.settings.difficulty == 3 && this.checkCollision(this.p1Dart, this.bloon05)) {
+            this.p1Dart.reset();
+            this.bloonPop(this.bloon05);
+        }
+
         if (this.checkCollision(this.p1Dart, this.bloon04)) {
             this.p1Dart.reset();
             this.bloonPop(this.bloon04);
